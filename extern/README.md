@@ -1,0 +1,1 @@
+- [stb_image.h](https://github.com/nothings/stb/blob/master/stb_image.h) is from the [nothings/stb](https://github.com/nothings/stb) repo. This is a single file header for loading textures. Use of this in the long term is not guaranteed.
