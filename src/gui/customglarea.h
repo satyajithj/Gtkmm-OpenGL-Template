@@ -2,11 +2,11 @@
 
 #include <memory>
 
-#include <gtkmm/glarea.h>
+#include <gtkmm-4.0/gtkmm/glarea.h>
 
-#include <gtkmm/eventcontrollermotion.h>
-#include <gtkmm/eventcontrollerscroll.h>
-#include <gtkmm/eventcontrollerlegacy.h>
+#include <gtkmm-4.0/gtkmm/eventcontrollermotion.h>
+#include <gtkmm-4.0/gtkmm/eventcontrollerscroll.h>
+#include <gtkmm-4.0/gtkmm/eventcontrollerlegacy.h>
 
 #include "enums.h"
 #include "common/basetype.h"

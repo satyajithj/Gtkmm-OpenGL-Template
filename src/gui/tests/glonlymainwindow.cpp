@@ -2,7 +2,7 @@
 
 #include <sigc++/sigc++.h>
 
-#include <gtkmm/eventcontrollerkey.h>
+#include <gtkmm-4.0/gtkmm/eventcontrollerkey.h>
 
 GLOnlyMainWindow::GLOnlyMainWindow() {
 

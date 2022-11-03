@@ -3,11 +3,10 @@
 #include <iostream>
 #include <memory>
 
-#include <gtkmm/window.h>
-#include <gtkmm/box.h>
-
-#include <gtkmm/button.h>
-#include <gtkmm/togglebutton.h>
+#include <gtkmm-4.0/gtkmm/window.h>
+#include <gtkmm-4.0/gtkmm/box.h>
+#include <gtkmm-4.0/gtkmm/button.h>
+#include <gtkmm-4.0/gtkmm/togglebutton.h>
 
 #include "common/basetype.h"
 #include "gui/customglarea.h"

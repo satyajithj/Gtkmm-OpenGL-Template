@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include <epoxy/gl.h>
-#include <gtkmm/application.h>
+#include <gtkmm-4.0/gtkmm/application.h>
 
 #include <gui/mainwindow.h>
 
