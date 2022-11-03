@@ -1,8 +1,7 @@
 #include "mainwindow.h"
+#include "enums.h"
 
 #include <sigc++/sigc++.h>
-
-#include "enums.h"
 
 MainWindow::MainWindow() {
 

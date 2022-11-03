@@ -3,6 +3,8 @@
 #include <iostream>
 
 #include <sigc++/sigc++.h>
+
+#include <gdkmm-3.0/gdkmm.h>
 #include <epoxy/gl.h>
 
 #include <glm/glm.hpp>
@@ -27,7 +29,6 @@ CustomGLArea::CustomGLArea(bool p_EnableDepth, std::shared_ptr<AppState> p_AppSt
 
     // Necessary to mark a widget as "for pointer/touch use" only
     set_can_focus(false);
-    // set_can_target(true);
 
     // Connect glArea signals
     signal_realize().connect(sigc::mem_fun(*this, &CustomGLArea::realize));
@@ -35,26 +36,17 @@ CustomGLArea::CustomGLArea(bool p_EnableDepth, std::shared_ptr<AppState> p_AppSt
     signal_render().connect(sigc::mem_fun(*this, &CustomGLArea::render), false);
     signal_resize().connect(sigc::mem_fun(*this, &CustomGLArea::on_area_resize));
 
-    // // Pointer motion event controller ----
-    // m_MotionController = Gtk::EventControllerMotion::create();
-    // m_MotionController->signal_enter().connect(sigc::mem_fun(*this, &CustomGLArea::on_pointer_enter));
-    // m_MotionController->signal_motion().connect(sigc::mem_fun(*this, &CustomGLArea::on_pointer_motion));
-    // m_MotionController->signal_leave().connect(sigc::mem_fun(*this, &CustomGLArea::on_pointer_leave));
-    // add_controller(m_MotionController);
+    // Pointer events ----
+    add_events(Gdk::EventMask::ENTER_NOTIFY_MASK);
+    add_events(Gdk::EventMask::LEAVE_NOTIFY_MASK);
+    // Pointer signals ----
+    signal_enter_notify_event().connect(sigc::mem_fun(*this, &CustomGLArea::on_pointer_enter_notify_event));
+    signal_leave_notify_event().connect(sigc::mem_fun(*this, &CustomGLArea::on_pointer_leave_notify_event));
 
-    // // Scroll event controller ----
-    // m_ScrollController = Gtk::EventControllerScroll::create();
-    // // The flag is set to "Gtk::EventControllerScroll::Flags::NONE" by default
-    // m_ScrollController->set_flags(Gtk::EventControllerScroll::Flags::VERTICAL);
-    // m_ScrollController->signal_scroll_begin().connect(sigc::mem_fun(*this, &CustomGLArea::on_scroll_begin), true);
-    // m_ScrollController->signal_scroll().connect(sigc::mem_fun(*this, &CustomGLArea::on_scroll), true);
-    // m_ScrollController->signal_scroll_end().connect(sigc::mem_fun(*this, &CustomGLArea::on_scroll_end), true);
-    // add_controller(m_ScrollController);
-
-    // // Legacy event controller ----
-    // legacyController = Gtk::EventControllerLegacy::create();
-    // legacyController->signal_event().connect(sigc::mem_fun(*this, &CustomGLArea::on_legacy_event), true);
-    // add_controller(legacyController);
+    // Scroll & pointer-motion events ----
+    add_events(Gdk::EventMask::SCROLL_MASK);
+    // Scroll & pointer-motion signals ----
+    signal_scroll_event().connect(sigc::mem_fun(*this, &CustomGLArea::on_scroll_event));
 }
 
 CustomGLArea::~CustomGLArea() { }
@@ -131,45 +123,50 @@ void CustomGLArea::set_projection(ProjectionType type) {
 
 // Handle pointer motion events ----
 
-void CustomGLArea::on_pointer_enter(double x, double y) {
+bool CustomGLArea::on_pointer_enter_notify_event(GdkEventCrossing* event) {
     _AppState->pointerInGLArea = true;
-    _AppState->setViewportPointerPos(x, y);
-    viewport2Scene(x, y);
+    _AppState->setViewportPointerPos(event->x, event->y);
+    viewport2Scene(event->x, event->y);
+    return true;
 }
 
-void CustomGLArea::on_pointer_motion(double x, double y) {
-    _AppState->setViewportPointerPos(x, y);
-    viewport2Scene(x, y);
-}
-
-void CustomGLArea::on_pointer_leave() {
+bool CustomGLArea::on_pointer_leave_notify_event(GdkEventCrossing* event) {
     _AppState->pointerInGLArea = false;
     _AppState->setViewportPointerPos(-1.0, -1.0);
+    return true;
 }
 
 // Scroll event controller callbacks ----
 
-bool CustomGLArea::on_scroll(double x, double y) {
-    if (y == 0) return false;
+bool CustomGLArea::on_scroll_event(GdkEventScroll* event) {
 
-    // std::cout << "Scroll: " << y << std::endl;
-    m_CameraManager->zoom(y);
+    // For scroll deltas, in GTK3, there is a bug that will probably never be fixed
+    // Link: https://stackoverflow.com/questions/11775161/gtk3-get-mouse-scroll-direction
+
+    double dy = 0.0;
+
+    switch (event->direction) {
+        case GDK_SCROLL_LEFT:
+        case GDK_SCROLL_RIGHT:
+            return false;
+        case GDK_SCROLL_UP:
+            dy = -1.0;
+            break;
+        case GDK_SCROLL_DOWN:
+            dy = +1.0;
+            break;
+        default:
+            break;
+    }
+
+    _AppState->setViewportPointerPos(event->x, event->y);
+    viewport2Scene(event->x, event->y);
+    m_CameraManager->zoom(dy);
+
     queue_render();
 
     return true;
 }
-
-void CustomGLArea::on_scroll_begin() { }
-
-void CustomGLArea::on_scroll_end() { }
-
-// // Legacy event controller callback ----
-// bool CustomGLArea::on_legacy_event(const Glib::RefPtr<const Gdk::Event>& event) {
-//     if (event.get()->get_event_type() == Gdk::Event::Type::SCROLL) {
-//         ;
-//     }
-//     return false;
-// }
 
 void CustomGLArea::cameraReset() {
     m_CameraManager->reset();

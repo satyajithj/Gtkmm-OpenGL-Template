@@ -46,19 +46,13 @@ private:
 
     void on_area_resize(int, int);
 
-    // Motion controller callbacks
-    void on_pointer_enter(double x, double y);
-    void on_pointer_motion(double x, double y);
-    void on_pointer_leave();
+    // Pointer enter & leave callbacks
+    bool on_pointer_enter_notify_event(GdkEventCrossing*);
+    bool on_pointer_leave_notify_event(GdkEventCrossing*);
 
-    // Scroll controller callbacks
-    bool on_scroll(double dx, double dy);
-    void on_scroll_begin();
-    void on_scroll_end();
+    // Scroll controller callbacks ( Also handles pointer motion for now -> Scale )
+    bool on_scroll_event(GdkEventScroll*);
 
     // Transformations
     void viewport2Scene(double x, double y);
-
-    // // Legacy event controller callback
-    // bool on_legacy_event(const Glib::RefPtr<const Gdk::Event>& event);
 };
