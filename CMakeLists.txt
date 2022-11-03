@@ -30,7 +30,7 @@ add_executable (${PROJECT_NAME}
 
 # Find packages
 find_package(PkgConfig)
-pkg_check_modules(GTKMM gtkmm-4.0)
+pkg_check_modules(GTKMM gtkmm-3.0)
 pkg_check_modules(EPOXY epoxy)
 
 find_package (Threads REQUIRED)

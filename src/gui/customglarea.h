@@ -2,11 +2,7 @@
 
 #include <memory>
 
-#include <gtkmm-4.0/gtkmm/glarea.h>
-
-#include <gtkmm-4.0/gtkmm/eventcontrollermotion.h>
-#include <gtkmm-4.0/gtkmm/eventcontrollerscroll.h>
-#include <gtkmm-4.0/gtkmm/eventcontrollerlegacy.h>
+#include <gtkmm-3.0/gtkmm/glarea.h>
 
 #include "enums.h"
 #include "common/basetype.h"
@@ -37,11 +33,6 @@ private:
 
     bool m_EnableDepth;
     unsigned int m_GLClearFlag;
-
-    // Event controllers
-    Glib::RefPtr<Gtk::EventControllerMotion> m_MotionController;
-    Glib::RefPtr<Gtk::EventControllerScroll> m_ScrollController;
-    // Glib::RefPtr<Gtk::EventControllerLegacy> legacyController;
 
     std::unique_ptr<ShaderMngr> m_Shader;
     std::unique_ptr<CameraManager> m_CameraManager;

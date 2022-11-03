@@ -18,6 +18,8 @@ class AppState {
 
 public:
 
+    bool isFullscreen {false};
+
     const glm::vec3 cameraHomePosition {0.0f, 0.0f, 3.0f};
     float projectionNearPlane {0.10f};
     float projectionFarPlane {100.0f};

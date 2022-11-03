@@ -2,8 +2,6 @@
 
 #include <sigc++/sigc++.h>
 
-#include <gtkmm-4.0/gtkmm/eventcontrollerkey.h>
-
 GLOnlyMainWindow::GLOnlyMainWindow() {
 
     // Init app state object (AppState)
@@ -11,33 +9,41 @@ GLOnlyMainWindow::GLOnlyMainWindow() {
 
     set_title("GL only window");
 
-    m_VBox.set_margin(12);
-    m_VBox.set_spacing(6);
-    set_child(m_VBox);
+    m_VBox.set_margin_top(8);
+    m_VBox.set_margin_left(8);
+    m_VBox.set_margin_bottom(8);
+    m_VBox.set_margin_right(8);
+    m_VBox.set_spacing(8);
+    add(m_VBox);
 
     // Boolean parameter enables/disables the depth buffer
-    m_CGLArea = new CustomGLArea(true, _AppState);
-    m_VBox.append(*m_CGLArea);
+    m_CGLArea = std::make_unique<CustomGLArea>(true, _AppState);
+    m_VBox.pack_start(*m_CGLArea);
 
-    // Events.
-    auto controller = Gtk::EventControllerKey::create();
-    controller->signal_key_pressed().connect(sigc::mem_fun(*this, &GLOnlyMainWindow::on_window_key_pressed), true);
-    add_controller(controller);
+    // Event controllers & Signals
+    signal_key_press_event().connect(sigc::mem_fun(*this, &GLOnlyMainWindow::on_key_press_event), true);
 }
 
-GLOnlyMainWindow::~GLOnlyMainWindow() {
-    delete m_CGLArea;
-}
+GLOnlyMainWindow::~GLOnlyMainWindow() { }
 
-bool GLOnlyMainWindow::on_window_key_pressed(guint keyval, guint, Gdk::ModifierType state) {
-    if(keyval == GDK_KEY_Escape) {
-        hide();
-        return true;
-    } else if (keyval == GDK_KEY_space) {
-        m_CGLArea->queue_render();
-        return true;
+bool GLOnlyMainWindow::on_key_press_event(GdkEventKey* keyEvent) {
+    // Handle key presses here ----
+
+    switch (keyEvent->keyval) {
+
+        case GDK_KEY_Escape:
+            // Toggle fullscreen
+            hide();
+            return true;
+
+        case GDK_KEY_space:
+            m_CGLArea->queue_render();
+            return true;
+
+        default:
+            break;
     }
 
-    // Event not handled
+    // Event not handled (propagates further?)
     return false;
 }

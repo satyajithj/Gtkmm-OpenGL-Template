@@ -16,7 +16,7 @@ CustomGLArea::CustomGLArea(bool p_EnableDepth, std::shared_ptr<AppState> p_AppSt
     // Initialize the camera
     m_CameraManager = std::make_unique<CameraManager>(_AppState);
 
-    set_expand(true);
+    set_hexpand(true);
     set_size_request(
         _AppState->viewPortSize.width,
         _AppState->viewPortSize.height);
@@ -27,7 +27,7 @@ CustomGLArea::CustomGLArea(bool p_EnableDepth, std::shared_ptr<AppState> p_AppSt
 
     // Necessary to mark a widget as "for pointer/touch use" only
     set_can_focus(false);
-    set_can_target(true);
+    // set_can_target(true);
 
     // Connect glArea signals
     signal_realize().connect(sigc::mem_fun(*this, &CustomGLArea::realize));
@@ -35,21 +35,21 @@ CustomGLArea::CustomGLArea(bool p_EnableDepth, std::shared_ptr<AppState> p_AppSt
     signal_render().connect(sigc::mem_fun(*this, &CustomGLArea::render), false);
     signal_resize().connect(sigc::mem_fun(*this, &CustomGLArea::on_area_resize));
 
-    // Pointer motion event controller ----
-    m_MotionController = Gtk::EventControllerMotion::create();
-    m_MotionController->signal_enter().connect(sigc::mem_fun(*this, &CustomGLArea::on_pointer_enter));
-    m_MotionController->signal_motion().connect(sigc::mem_fun(*this, &CustomGLArea::on_pointer_motion));
-    m_MotionController->signal_leave().connect(sigc::mem_fun(*this, &CustomGLArea::on_pointer_leave));
-    add_controller(m_MotionController);
+    // // Pointer motion event controller ----
+    // m_MotionController = Gtk::EventControllerMotion::create();
+    // m_MotionController->signal_enter().connect(sigc::mem_fun(*this, &CustomGLArea::on_pointer_enter));
+    // m_MotionController->signal_motion().connect(sigc::mem_fun(*this, &CustomGLArea::on_pointer_motion));
+    // m_MotionController->signal_leave().connect(sigc::mem_fun(*this, &CustomGLArea::on_pointer_leave));
+    // add_controller(m_MotionController);
 
-    // Scroll event controller ----
-    m_ScrollController = Gtk::EventControllerScroll::create();
-    // The flag is set to "Gtk::EventControllerScroll::Flags::NONE" by default
-    m_ScrollController->set_flags(Gtk::EventControllerScroll::Flags::VERTICAL);
-    m_ScrollController->signal_scroll_begin().connect(sigc::mem_fun(*this, &CustomGLArea::on_scroll_begin), true);
-    m_ScrollController->signal_scroll().connect(sigc::mem_fun(*this, &CustomGLArea::on_scroll), true);
-    m_ScrollController->signal_scroll_end().connect(sigc::mem_fun(*this, &CustomGLArea::on_scroll_end), true);
-    add_controller(m_ScrollController);
+    // // Scroll event controller ----
+    // m_ScrollController = Gtk::EventControllerScroll::create();
+    // // The flag is set to "Gtk::EventControllerScroll::Flags::NONE" by default
+    // m_ScrollController->set_flags(Gtk::EventControllerScroll::Flags::VERTICAL);
+    // m_ScrollController->signal_scroll_begin().connect(sigc::mem_fun(*this, &CustomGLArea::on_scroll_begin), true);
+    // m_ScrollController->signal_scroll().connect(sigc::mem_fun(*this, &CustomGLArea::on_scroll), true);
+    // m_ScrollController->signal_scroll_end().connect(sigc::mem_fun(*this, &CustomGLArea::on_scroll_end), true);
+    // add_controller(m_ScrollController);
 
     // // Legacy event controller ----
     // legacyController = Gtk::EventControllerLegacy::create();

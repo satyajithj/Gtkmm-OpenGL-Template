@@ -3,10 +3,10 @@
 #include <iostream>
 #include <memory>
 
-#include <gtkmm-4.0/gtkmm/window.h>
-#include <gtkmm-4.0/gtkmm/box.h>
-#include <gtkmm-4.0/gtkmm/button.h>
-#include <gtkmm-4.0/gtkmm/togglebutton.h>
+#include <gtkmm-3.0/gtkmm/window.h>
+#include <gtkmm-3.0/gtkmm/box.h>
+#include <gtkmm-3.0/gtkmm/button.h>
+#include <gtkmm-3.0/gtkmm/togglebutton.h>
 
 #include "common/basetype.h"
 #include "gui/customglarea.h"
@@ -18,8 +18,8 @@ public:
     ~MainWindow() override;
 
 private:
-    Gtk::Box m_HBox {Gtk::Orientation::HORIZONTAL, false};
-    Gtk::Box m_VBoxToggles {Gtk::Orientation::VERTICAL, false};
+    Gtk::Box m_HBox {Gtk::ORIENTATION_HORIZONTAL, false};
+    Gtk::Box m_VBoxToggles {Gtk::ORIENTATION_VERTICAL, false};
 
     std::unique_ptr<CustomGLArea> m_CGLArea;
 
@@ -28,7 +28,8 @@ private:
 
     Gtk::Button m_ResetButton {"Reset"};
 
-    bool on_window_key_pressed(guint keyval, guint keycode, Gdk::ModifierType state);
+    bool on_window_state_event(GdkEventWindowState* window_state_event);
+    bool on_key_press_event(GdkEventKey* keyEvent);
 
     void on_orthographic_toggled();
     void on_perspective_toggled();

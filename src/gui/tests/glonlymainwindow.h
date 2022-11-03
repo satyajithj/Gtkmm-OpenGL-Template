@@ -1,7 +1,7 @@
 #pragma once
 
-#include <gtkmm-4.0/gtkmm/window.h>
-#include <gtkmm-4.0/gtkmm/box.h>
+#include <gtkmm-3.0/gtkmm/window.h>
+#include <gtkmm-3.0/gtkmm/box.h>
 
 #include "common/basetype.h"
 #include "gui/customglarea.h"
@@ -14,8 +14,8 @@ public:
 
 private:
 
-    Gtk::Box m_VBox {Gtk::Orientation::VERTICAL, false};
-    CustomGLArea* m_CGLArea;
+    Gtk::Box m_VBox {Gtk::ORIENTATION_VERTICAL, false};
+    std::unique_ptr<CustomGLArea> m_CGLArea;
 
-    bool on_window_key_pressed(guint keyval, guint keycode, Gdk::ModifierType state);
+    bool on_key_press_event(GdkEventKey* keyEvent);
 };
