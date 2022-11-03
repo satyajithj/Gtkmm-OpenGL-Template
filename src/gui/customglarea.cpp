@@ -14,7 +14,7 @@ CustomGLArea::CustomGLArea(bool p_EnableDepth, std::shared_ptr<AppState> p_AppSt
     _AppState = p_AppState;
 
     // Initialize the camera
-    m_CameraManager = new CameraManager(_AppState);
+    m_CameraManager = std::make_unique<CameraManager>(_AppState);
 
     set_expand(true);
     set_size_request(
@@ -77,9 +77,8 @@ void CustomGLArea::realize() {
             m_GLClearFlag |= GL_DEPTH_BUFFER_BIT;
         }
 
-        m_Shader = new ShaderMngr("src/shaders/vs.glsl", "src/shaders/fs.glsl");
-
-        m_Crate = new Crate(glm::vec3(0.0f, 0.0f, 0.0f));
+        m_Shader = std::make_unique<ShaderMngr>("src/shaders/vs.glsl", "src/shaders/fs.glsl");
+        m_Crate = std::make_unique<Crate>(glm::vec3(0.0f, 0.0f, 0.0f));
 
     } catch(const Gdk::GLError& gle) {
         std::cerr << "An error occured making the context current during realize:" << std::endl;
@@ -91,11 +90,6 @@ void CustomGLArea::unrealize() {
     make_current();
     try {
         throw_if_error();
-
-        delete m_Shader;
-        delete m_CameraManager;
-
-        delete m_Crate;
 
     } catch(const Gdk::GLError& gle) {
         std::cerr << "An error occured making the context current during unrealize" << std::endl;

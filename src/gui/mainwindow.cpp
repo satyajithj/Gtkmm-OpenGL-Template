@@ -18,7 +18,7 @@ MainWindow::MainWindow() {
     set_child(m_HBox);
 
     // Boolean parameter enables/disables the depth buffer
-    m_CGLArea = new CustomGLArea(true, _AppState);
+    m_CGLArea = std::make_unique<CustomGLArea>(true, _AppState);
 
     // Vertical box with buttons
     m_VBoxToggles.set_margin(8);
@@ -50,9 +50,7 @@ MainWindow::MainWindow() {
     std::cout << "(AppState) Shared pointer ref count: " << _AppState.use_count() << std::endl;
 }
 
-MainWindow::~MainWindow() {
-    delete m_CGLArea;
-}
+MainWindow::~MainWindow() { }
 
 bool MainWindow::on_window_key_pressed(guint keyval, guint, Gdk::ModifierType state) {
     // Handle key presses here ----

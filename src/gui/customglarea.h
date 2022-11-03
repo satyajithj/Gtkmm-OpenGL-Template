@@ -43,10 +43,10 @@ private:
     Glib::RefPtr<Gtk::EventControllerScroll> m_ScrollController;
     // Glib::RefPtr<Gtk::EventControllerLegacy> legacyController;
 
-    ShaderMngr* m_Shader;
-    CameraManager* m_CameraManager;
+    std::unique_ptr<ShaderMngr> m_Shader;
+    std::unique_ptr<CameraManager> m_CameraManager;
 
-    Crate* m_Crate;
+    std::unique_ptr<Crate> m_Crate;
 
     // GLArea callbacks
     void realize();

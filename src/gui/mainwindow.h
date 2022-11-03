@@ -22,7 +22,7 @@ private:
     Gtk::Box m_HBox {Gtk::Orientation::HORIZONTAL, false};
     Gtk::Box m_VBoxToggles {Gtk::Orientation::VERTICAL, false};
 
-    CustomGLArea* m_CGLArea;
+    std::unique_ptr<CustomGLArea> m_CGLArea;
 
     Gtk::ToggleButton m_OrthographicButton {"Orthographic"};
     Gtk::ToggleButton m_PerspectiveButton {"Perspective"};
